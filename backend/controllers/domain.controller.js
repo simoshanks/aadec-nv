@@ -25,13 +25,13 @@ exports.getById = async (req, res) => {
 
 exports.create = async (req, res) => {
     try {
-        const { nom, description } = req.body;
+        const { nom,  } = req.body;
         
         if (!nom) {
             return res.status(400).json({ error: 'Le nom du domaine est obligatoire' });
         }
 
-        const id = await Domain.create(nom, description);
+        const id = await Domain.create(nom, );
         res.status(201).json({ 
             message: 'Domaine créé avec succès', 
             id 
@@ -44,13 +44,13 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
     try {
-        const { nom, description } = req.body;
+        const { nom,} = req.body;
         
         if (!nom) {
             return res.status(400).json({ error: 'Le nom du domaine est obligatoire' });
         }
 
-        await Domain.update(req.params.id, nom, description);
+        await Domain.update(req.params.id, nom, );
         res.json({ message: 'Domaine mis à jour avec succès' });
     } catch (error) {
         console.error(error);

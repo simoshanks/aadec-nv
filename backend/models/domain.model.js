@@ -13,16 +13,16 @@ class Domain {
 
     static async create(nom, description) {
         const [result] = await db.query(
-            'INSERT INTO domain (nom, description) VALUES (?, ?)',
-            [nom, description]
+            'INSERT INTO domain (nom,) VALUES (?)',
+            [nom, ]
         );
         return result.insertId;
     }
 
-    static async update(id, nom, description) {
+    static async update(id, nom) {
         await db.query(
-            'UPDATE domain SET nom = ?, description = ? WHERE id = ?',
-            [nom, description, id]
+            'UPDATE domain SET nom = ? WHERE id = ?',
+            [nom, id]
         );
         return true;
     }
