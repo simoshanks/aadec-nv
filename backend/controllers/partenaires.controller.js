@@ -127,62 +127,75 @@ exports.create = async (req, res) => {
 exports.update = async (req, res) => {
     try {
         const { categorie_id, nom } = req.body;
-        
+
         if (!nom || !categorie_id) {
-            if (req.file) {
-                fs.unlinkSync(req.file.path);
-            }
+            // حذف الملف إذا تم رفعه وكانت البيانات غير مكتملة
+            if (req.file) fs.unlinkSync(req.file.path);
             return res.status(400).json({ 
                 error: 'Le nom du partenaire et la catégorie sont obligatoires' 
             });
         }
 
-        let logoPath = null;
+        // جلب الشريك القديم
+        const oldPartenaire = await Partenaire.findById(req.params.id);
+        if (!oldPartenaire) {
+            if (req.file) fs.unlinkSync(req.file.path);
+            return res.status(404).json({ error: 'Partenaire introuvable' });
+        }
+
+        // التعامل مع اللوغو
+        let logoPath = oldPartenaire.logo; // افتراضيا اللوغو القديم
+
         if (req.file) {
-            logoPath = req.file.filename;
-            
+            logoPath = req.file.filename; // لوغو جديد
+
             // حذف الصورة القديمة إذا كانت موجودة
-            const oldPartenaire = await Partenaire.findById(req.params.id);
-            if (oldPartenaire && oldPartenaire.logo) {
-                const oldPath = path.join('public/uploads/logos', oldPartenaire.logo);
-                if (fs.existsSync(oldPath)) {
-                    fs.unlinkSync(oldPath);
-                }
+            if (oldPartenaire.logo) {
+                const oldPath = path.join('uploads/logos', oldPartenaire.logo);
+                if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
             }
         }
 
-        await Partenaire.update(req.params.id, categorie_id, nom, logoPath || req.body.logo);
+        // تحديث البيانات مع اللوغو الصحيح
+        await Partenaire.update(req.params.id, categorie_id, nom, logoPath);
+
         res.json({ 
             message: 'Partenaire mis à jour avec succès',
             logo: logoPath ? `/uploads/logos/${logoPath}` : null
         });
+
     } catch (error) {
-        if (req.file) {
-            fs.unlinkSync(req.file.path);
-        }
+        // حذف الملف إذا حدث خطأ أثناء الرفع
+        if (req.file) fs.unlinkSync(req.file.path);
         console.error(error);
         res.status(500).json({ error: 'Erreur serveur' });
     }
 };
 
+
 exports.delete = async (req, res) => {
     try {
-        // حذف الصورة المرفقة إذا كانت موجودة
         const partenaire = await Partenaire.findById(req.params.id);
-        if (partenaire && partenaire.logo) {
-            const logoPath = path.join('public/uploads/logos', partenaire.logo);
+        if (!partenaire) {
+            return res.status(404).json({ error: 'Partenaire non trouvé' });
+        }
+
+        // حذف الصورة إذا كانت موجودة
+        if (partenaire.logo) {
+            const logoPath = path.join(__dirname, '..', 'uploads', 'logos', partenaire.logo);
             if (fs.existsSync(logoPath)) {
                 fs.unlinkSync(logoPath);
             }
         }
-        
-        await Partenaire.delete(req.params.id);
+
+        await Partenaire.delete(req.params.id); // أو destroy/remove حسب ORM
         res.json({ message: 'Partenaire supprimé avec succès' });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Erreur serveur' });
+        res.status(500).json({ error: error.message || 'Erreur serveur' });
     }
 };
+
 
 exports.getById = async (req, res) => {
     try {

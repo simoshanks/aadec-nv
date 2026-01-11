@@ -1,12 +1,28 @@
 const express = require('express');
 const router = express.Router();
-const projectsController = require('../controllers/projects.controller');
+const multer = require('multer');
+const projectController = require('../controllers/projects.controller');
 
-router.get('/', projectsController.getAll);
-router.get('/domain/:domainId', projectsController.getByDomain);
-router.get('/:id', projectsController.getById);
-router.post('/', projectsController.create);
-router.put('/:id', projectsController.update);
-router.delete('/:id', projectsController.delete);
+/* MULTER CONFIG */
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/projects');
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + '-' + file.originalname);
+    }
+});
+
+const upload = multer({ storage });
+
+/* ROUTES */
+router.get('/', projectController.getAll);
+router.get('/domain/:domainId', projectController.getByDomain);
+router.get('/:id', projectController.getById);
+
+router.post('/', upload.single('photo'), projectController.create);
+router.put('/:id', upload.single('photo'), projectController.update);
+
+router.delete('/:id', projectController.delete);
 
 module.exports = router;

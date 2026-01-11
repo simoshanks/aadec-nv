@@ -11,6 +11,8 @@ const domainRoutes = require('./routes/domain.routes');
 const projectsRoutes = require('./routes/projects.routes');
 const galleryRoutes = require('./routes/gallery.routes');
 const documentsRoutes = require('./routes/documents.routes');
+const actualitesRoutes = require('./routes/actualitesRoutes');
+
 
 const app = express();
 
@@ -30,6 +32,9 @@ app.use('/api/domain', domainRoutes);
 app.use('/api/projects', projectsRoutes);
 app.use('/api/gallery', galleryRoutes);
 app.use('/api/documents', documentsRoutes);
+
+app.use("/api/actualites", actualitesRoutes);
+
 
 
 // Page d'accueil
@@ -51,7 +56,7 @@ app.use((err, req, res, next) => {
     res.status(500).json({ error: 'Une erreur est survenue sur le serveur' });
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT ;
 
 app.listen(PORT, () => {
     console.log(`Le serveur fonctionne sur le port ${PORT}`);

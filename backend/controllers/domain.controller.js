@@ -24,23 +24,25 @@ exports.getById = async (req, res) => {
 };
 
 exports.create = async (req, res) => {
-    try {
-        const { nom,  } = req.body;
-        
-        if (!nom) {
-            return res.status(400).json({ error: 'Le nom du domaine est obligatoire' });
-        }
-
-        const id = await Domain.create(nom, );
-        res.status(201).json({ 
-            message: 'Domaine créé avec succès', 
-            id 
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Erreur serveur' });
+  try {
+    const { nom } = req.body; // basta, ila ma kaynsh nom kayrd 400
+    if (!nom) {
+      return res.status(400).json({ error: 'Le nom du domaine est obligatoire' });
     }
+
+    // 3la 7asab implemention dyal Domain.create
+    const id = await Domain.create(nom); 
+
+    res.status(201).json({ 
+      message: 'Domaine créé avec succès', 
+      id 
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
 };
+
 
 exports.update = async (req, res) => {
     try {
