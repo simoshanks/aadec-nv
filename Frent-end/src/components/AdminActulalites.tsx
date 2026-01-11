@@ -54,8 +54,8 @@ const categories: Categorie[] = [
 const quillModules = {
   toolbar: [
     [{ header: [1, 2, 3, 4, 5, 6, false] }],
-    [{ color: [] }, { background: [] }], // ✅ التحكم فالألوان
-    ["#146C2D", "#D69B49", "#DC2626", "#2563EB"] ,
+    ["bold", "italic", "underline", "strike"],
+    [{ color: [] }, { background: [] }], // ✅ التحكم فالألوان ,
     [{ list: "ordered" }, { list: "bullet" }],
     ["link", "image", "blockquote", "code-block"],
     ["clean"],
@@ -65,8 +65,8 @@ const quillModules = {
 
 const quillFormats = [
   "header",
-  "color",        // ✅
-  "background",   // ✅
+  "color",        
+  "background",   
   "bold",
   "italic",
   "underline",
@@ -346,10 +346,7 @@ const totalViews = actualites.reduce(
                       <label className="block text-sm font-semibold mb-2">Contenu *</label>
                       <ReactQuill theme="snow" value={formData.contenu || ""} onChange={(v) => setFormData(prev => ({ ...prev, contenu: v }))} modules={quillModules} formats={quillFormats} className="h-[400px]" />
                     </div>
-                    <div>
-                      <label className="block text-sm font-semibold mb-2">Tags (virgules)</label>
-                      <input type="text" name="tags" value={formData.tags} onChange={handleInputChange} className="w-full px-4 py-3 border rounded-xl" />
-                    </div>
+                   <br/>
                   </div>
 
                   <div className="space-y-6">

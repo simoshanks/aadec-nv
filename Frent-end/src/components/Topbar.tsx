@@ -70,21 +70,21 @@ const Topbar = () => {
               {/* Social */}
               <div className="flex items-center gap-3">
                 <a
-                  href="#"
+                  href="https://www.facebook.com/people/AADEC-azilal/100064177625574/?rdid=v7qdNJWQbIUKXSIq&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F16rxatcupq%2F"
                   aria-label="Facebook"
                   className="hover:text-white/80 transition-colors"
                 >
                   <FaFacebookF className="w-4 h-4" />
                 </a>
                 <a
-                  href="#"
+                  href="https://wa.me/212624751985"
                   aria-label="WhatsApp"
                   className="hover:text-white/80 transition-colors"
                 >
                   <FaWhatsapp className="w-4 h-4" />
                 </a>
                 <a
-                  href="#"
+                  href="https://www.instagram.com/aadec_azilal/"
                   aria-label="Instagram"
                   className="hover:text-white/80 transition-colors"
                 >
